@@ -1,0 +1,5 @@
+- SaaS architecture design (multi-tenant)
+- Role-based access control (Admin / Manager / Teacher)
+- Task, duty, calendar and notification systems
+- Component-driven frontend architecture
+- Mobile-compatible responsive design

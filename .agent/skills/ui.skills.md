@@ -1,0 +1,5 @@
+- Design system driven UI development
+- Reusable and atomic component planning
+- Admin dashboard UX patterns
+- Table, form and modal usability
+- Responsive breakpoint discipline

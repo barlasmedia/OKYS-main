@@ -1,0 +1,5 @@
+- React / modern web UI abstraction
+- State management strategy (global vs local)
+- API contract and data model design
+- Modular service-based backend thinking
+- Secure authentication and authorization flows
