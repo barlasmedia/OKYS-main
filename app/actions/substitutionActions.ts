@@ -49,7 +49,8 @@ export async function createSubstitution(
     periodName: string,
     dateStr: string,
     periodIndex: number,
-    reason: string
+    reason: string,
+    excuseType: 'raporlu' | 'idari_izinli_gorevli' | 'gelmedi'
 ) {
     try {
         // 1. Get current substitution fee
@@ -77,7 +78,8 @@ export async function createSubstitution(
                 period_index: periodIndex,
                 reason,
                 status: 'approved',
-                amount: fee // Store historical fee
+                amount: fee, // Store historical fee
+                excuse_type: excuseType // Store excuse type for payroll calculation
             });
 
         if (error) throw error;

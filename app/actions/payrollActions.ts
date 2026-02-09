@@ -101,8 +101,9 @@ export async function getPayrollData(schoolId: string, month: number, year: numb
                 t.total_sub_amount += amount;
                 t.total_amount += amount;
             }
-            // Original (Deducted)
-            if (sub.original_teacher_id) {
+            // Original (Deducted ONLY if excuse is 'gelmedi')
+            // If excuse is 'raporlu' or 'idari_izinli_gorevli', no deduction is applied
+            if (sub.original_teacher_id && (sub.excuse_type === 'gelmedi' || sub.excuse_type === 'raporlu')) {
                 const t = getTeacher(sub.original_teacher_id, sub.original_teacher_name);
                 // For deduction, we use the same amount logic but negative
                 const amount = sub.amount !== undefined && sub.amount !== null ? Number(sub.amount) : fees.substitution_fee;

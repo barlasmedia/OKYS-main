@@ -3,14 +3,7 @@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../ui/table"
 import { Button } from "../ui/button"
 import { Trash2 } from "lucide-react"
-import { ScheduleSlot, SubstituteCandidate } from "../../lib/types"
-
-export interface Assignment {
-    id: string
-    slot: ScheduleSlot
-    originalTeacherId: string
-    substituteTeacher: SubstituteCandidate
-}
+import { Assignment } from "../../lib/types"
 
 interface AssignmentTableProps {
     assignments: Assignment[]
@@ -28,6 +21,7 @@ export function AssignmentTable({ assignments, onCancel }: AssignmentTableProps)
                         <TableHead className="text-zinc-400">Ders Saati</TableHead>
                         <TableHead className="text-zinc-400">Sınıf</TableHead>
                         <TableHead className="text-zinc-400">Ders</TableHead>
+                        <TableHead className="text-zinc-400">Mazeret</TableHead>
                         <TableHead className="text-zinc-400">Nöbetçi/Yerine Gelen</TableHead>
                         <TableHead className="text-right text-zinc-400">İşlem</TableHead>
                     </TableRow>
@@ -42,6 +36,13 @@ export function AssignmentTable({ assignments, onCancel }: AssignmentTableProps)
                             </TableCell>
                             <TableCell className="text-zinc-300">{assignment.slot.className}</TableCell>
                             <TableCell className="text-zinc-300">{assignment.slot.subjectName}</TableCell>
+                            <TableCell>
+                                <span className="px-2 py-1 rounded text-xs font-medium bg-zinc-800 text-zinc-300">
+                                    {assignment.excuseType === 'raporlu' ? 'Raporlu' :
+                                        assignment.excuseType === 'idari_izinli_gorevli' ? 'İdari İzinli – Görevli' :
+                                            'Gelmedi'}
+                                </span>
+                            </TableCell>
                             <TableCell className="text-emerald-400 font-medium">
                                 {assignment.substituteTeacher.teacher.name}
                             </TableCell>

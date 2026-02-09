@@ -40,6 +40,9 @@ export function SubstitutionManager({
     const [candidates, setCandidates] = useState<SubstituteCandidate[]>([]);
     const [loadingCandidates, setLoadingCandidates] = useState(false);
 
+    // Excuse type state
+    const [excuseType, setExcuseType] = useState<'raporlu' | 'idari_izinli_gorevli' | 'gelmedi'>('gelmedi');
+
     // Initial load if params provided
     React.useEffect(() => {
         if (selectedTeacherId && selectedDate) {
@@ -103,13 +106,14 @@ export function SubstitutionManager({
     };
 
     const handleCandidateSelect = async (candidate: SubstituteCandidate) => {
-        const reason = prompt(`Görevlendirme Onayı:\n\n${candidate.name} öğretmeni görevlendirilecek.\nLütfen mazeret/sebep giriniz:`);
+        // Simple confirmation dialog - excuse is already selected via dropdown
+        const excuseLabel = excuseType === 'raporlu' ? 'Raporlu' :
+            excuseType === 'idari_izinli_gorevli' ? 'İdari İzinli – Görevli' :
+                'Gelmedi';
 
-        if (reason === null) return; // Cancelled
-        if (reason.trim() === '') {
-            alert("Mazeret girmek zorunludur.");
-            return;
-        }
+        const confirmed = confirm(`Görevlendirme Onayı:\n\n${candidate.name} öğretmeni görevlendirilecek.\nMazeret: ${excuseLabel}\n\nDevam etmek istiyor musunuz?`);
+
+        if (!confirmed) return; // User cancelled
 
         const origTeacher = initialTeachers.find(t => t.id === selectedTeacherId);
         const subjectName = selectedSlot.lesson?.subject?.name || 'Unknown';
@@ -128,7 +132,8 @@ export function SubstitutionManager({
             periodName,
             selectedDate,
             selectedSlot.period_index,
-            reason
+            excuseLabel, // Use excuse label as reason
+            excuseType // Pass excuse type to server action
         );
 
         if (result.success) {
@@ -187,6 +192,24 @@ export function SubstitutionManager({
                                     <option key={t.id} value={t.id}>{t.name}</option>
                                 ))}
                             </select>
+                        </div>
+
+                        <div>
+                            <label className="block text-xs font-bold text-muted-foreground uppercase tracking-widest mb-1.5 ml-1">
+                                Mazeret Türü <span className="text-rose-500">*</span>
+                            </label>
+                            <select
+                                value={excuseType}
+                                onChange={(e) => setExcuseType(e.target.value as any)}
+                                className="w-full bg-background border border-border rounded-xl p-3 focus:ring-2 focus:ring-primary outline-none text-foreground transition-all"
+                            >
+                                <option value="gelmedi">Gelmedi</option>
+                                <option value="raporlu">Raporlu</option>
+                                <option value="idari_izinli_gorevli">İdari İzinli – Görevli</option>
+                            </select>
+                            <p className="text-xs text-muted-foreground mt-1.5 ml-1">
+                                {['gelmedi', 'raporlu'].includes(excuseType) ? '⚠️ Kesinti uygulanır' : '✅ Kesinti uygulanmaz'}
+                            </p>
                         </div>
                     </div>
                 </div>

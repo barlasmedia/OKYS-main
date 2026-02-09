@@ -30,6 +30,9 @@ export function SubstitutionManager({ initialTeachers }: SubstitutionManagerProp
     const [schedule, setSchedule] = React.useState<ScheduleSlot[]>([])
     const [loadingSchedule, setLoadingSchedule] = React.useState(false)
 
+    // Excuse type state
+    const [excuseType, setExcuseType] = React.useState<'raporlu' | 'idari_izinli_gorevli' | 'gelmedi'>('gelmedi')
+
     // Substitute Search State
     const [selectedSlot, setSelectedSlot] = React.useState<ScheduleSlot | null>(null)
     const [candidates, setCandidates] = React.useState<SubstituteCandidate[]>([])
@@ -82,7 +85,8 @@ export function SubstitutionManager({ initialTeachers }: SubstitutionManagerProp
             id: crypto.randomUUID(),
             slot: selectedSlot,
             originalTeacherId: selectedTeacherId,
-            substituteTeacher: candidate
+            substituteTeacher: candidate,
+            excuseType: excuseType // Add excuse type to assignment
         }
 
         setAssignments(prev => [...prev, newAssignment])
@@ -145,6 +149,24 @@ export function SubstitutionManager({ initialTeachers }: SubstitutionManagerProp
                                 selectedTeacherId={selectedTeacherId}
                                 onSelect={setSelectedTeacherId}
                             />
+                        </div>
+
+                        <div className="flex flex-col space-y-2">
+                            <label className="text-sm font-medium text-zinc-400">
+                                Mazeret Türü <span className="text-rose-500">*</span>
+                            </label>
+                            <select
+                                value={excuseType}
+                                onChange={(e) => setExcuseType(e.target.value as any)}
+                                className="w-full px-4 py-2 bg-zinc-800 border border-zinc-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-primary"
+                            >
+                                <option value="gelmedi">Gelmedi</option>
+                                <option value="raporlu">Raporlu</option>
+                                <option value="idari_izinli_gorevli">İdari İzinli – Görevli</option>
+                            </select>
+                            <p className="text-xs text-zinc-500">
+                                {excuseType === 'gelmedi' ? '⚠️ Kesinti uygulanır' : '✅ Kesinti uygulanmaz'}
+                            </p>
                         </div>
                     </CardContent>
                 </Card>

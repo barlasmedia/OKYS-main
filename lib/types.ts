@@ -55,4 +55,5 @@ export interface Assignment {
     slot: ScheduleSlot
     originalTeacherId: string
     substituteTeacher: SubstituteCandidate
+    excuseType: 'raporlu' | 'idari_izinli_gorevli' | 'gelmedi'
 }
