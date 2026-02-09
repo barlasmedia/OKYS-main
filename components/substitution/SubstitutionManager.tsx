@@ -209,6 +209,7 @@ export function SubstitutionManager({
                             </select>
                             <p className="text-xs text-muted-foreground mt-1.5 ml-1">
                                 {['gelmedi', 'raporlu'].includes(excuseType) ? '⚠️ Kesinti uygulanır' : '✅ Kesinti uygulanmaz'}
+
                             </p>
                         </div>
                     </div>
